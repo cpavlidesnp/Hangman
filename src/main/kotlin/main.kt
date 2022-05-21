@@ -2,7 +2,7 @@ var allWords = arrayListOf("abruptly", "absurd", "abyss", "affix", "askew", "ave
 var chosenWord: String = ""
 var attempts: Int = 1
 var failedAttempts: Int = 0
-val maxAttempts: Int = 6
+const val maxAttempts: Int = 6
 var isGameActive = true
 var lettersFound = hashSetOf<String>()
 var lettersMissed = hashSetOf<String>()
@@ -15,18 +15,21 @@ fun main (){
     while (isGameActive) {
         iteration ++
         //println(chosenWord)
+        printHangman()
         printWord(chosenWord, lettersFound)
         if (iteration>1){
             printMissed()
         }
         println("Please choose a letter. Attempt: $attempts -  Failed Attempts: $failedAttempts / $maxAttempts")
-        val userGuess = readLine()?:""
+        val userInput = readLine()?:""
+        val userGuess = userInput.lowercase()
         if (validateUserGuess(userGuess))
             checkGuess(userGuess, chosenWord)
         else
             println("Non-Attempt. Input is invalid (more than 1 letter)")
 
         if (checkWinner(lettersFound, chosenWord)){
+            printHangman()
             printWord(chosenWord, lettersFound)
             println("YOU FOUND THE WORD!! ==> $chosenWord")
             if (playAgain()){
@@ -40,6 +43,7 @@ fun main (){
 
 
         if (checkAttempts()) continue else {
+            printHangman()
             printWord(chosenWord, lettersFound)
             printMissed()
             println("Failed Attempts: $failedAttempts")
@@ -57,8 +61,8 @@ fun main (){
 
 fun newGame(){
     chosenWord = chooseWord()
-    lettersFound = hashSetOf<String>()
-    lettersMissed = hashSetOf<String>()
+    lettersFound = hashSetOf()
+    lettersMissed = hashSetOf()
     failedAttempts = 0
     attempts = 1
 
@@ -67,13 +71,13 @@ fun newGame(){
 }
 
 fun chooseWord(): String {
-    val randomNum = (0..allWords.size).random() // generated random from 0 to 10 included
+    val randomNum = (0..allWords.size).random() // generated random from 0
 
     return allWords[randomNum]
 }
 
 fun printWord(word:String, found: Set<String>){
-
+    println("WORD:")
     for (letter in word){
         if (found.contains(letter.toString())) print(" $letter ") else print(" _ ")
     }
@@ -126,4 +130,75 @@ fun playAgain(): Boolean{
     return (userInput=="y" || userInput=="yes")
 
 
+}
+
+fun printHangman(){
+    println("  |-------|-")
+    println("  |       | ")
+    when (failedAttempts){
+        0->{
+            println("  |         ")
+            println("  |         ")
+            println("  |         ")
+            println("  |         ")
+            println("  |         ")
+            println("  |         ")
+        }
+        1->{
+            println("  |       O ")
+            println("  |         ")
+            println("  |         ")
+            println("  |         ")
+            println("  |         ")
+            println("  |         ")
+        }
+        2->{
+            println("  |       O ")
+            println("  |       | ")
+            println("  |       | ")
+            println("  |         ")
+            println("  |         ")
+            println("  |         ")
+        }
+        3->{
+            println("  |       O ")
+            println("  |      /| ")
+            println("  |       | ")
+            println("  |         ")
+            println("  |         ")
+            println("  |         ")
+        }
+        4->{
+            println("  |       O ")
+            println("  |      /|\\")
+            println("  |       | ")
+            println("  |         ")
+            println("  |         ")
+            println("  |         ")
+        }
+        5->{
+            println("  |       O ")
+            println("  |      /|\\")
+            println("  |       | ")
+            println("  |      /  ")
+            println("  |         ")
+            println("  |         ")
+        }
+        6->{
+            println("  |       O ")
+            println("  |      /|\\")
+            println("  |       | ")
+            println("  |      / \\")
+            println("  |         ")
+            println("  |         ")
+        }
+        else -> {
+            println("  |         ")
+            println("  |         ")
+            println("  |         ")
+            println("  |         ")
+            println("  |         ")
+            println("  |         ")
+        }
+    }
 }
