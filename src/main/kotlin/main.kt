@@ -8,17 +8,18 @@ var lettersFound = hashSetOf<String>()
 var lettersMissed = hashSetOf<String>()
 
 fun main (){
+
     newGame()
 
     var iteration = 0
     while (isGameActive) {
         iteration ++
-        println(chosenWord)
+        //println(chosenWord)
         printWord(chosenWord, lettersFound)
         if (iteration>1){
             printMissed()
         }
-        println("Please choose a letter. Attempt: $attempts -  Failed Attempts: $failedAttempts")
+        println("Please choose a letter. Attempt: $attempts -  Failed Attempts: $failedAttempts / $maxAttempts")
         val userGuess = readLine()?:""
         if (validateUserGuess(userGuess))
             checkGuess(userGuess, chosenWord)
@@ -42,7 +43,7 @@ fun main (){
             printWord(chosenWord, lettersFound)
             printMissed()
             println("Failed Attempts: $failedAttempts")
-            println("YOU HAVE BEEN HANGED")
+            println("YOU HAVE BEEN HANGED. WORD WAS ==> $chosenWord")
             if (playAgain()){
                 newGame()
             }else{
@@ -120,7 +121,7 @@ fun checkWinner(userLetters: Set<String>, word:String): Boolean {
 }
 
 fun playAgain(): Boolean{
-    println("Would uou like to play again? y/n")
+    println("Would you like to play again? y/n")
     val userInput = readLine()?:"n"
     return (userInput=="y" || userInput=="yes")
 
